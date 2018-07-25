@@ -1,68 +1,60 @@
 package kkssry.calendar;
 
-import java.util.Scanner;
-
 public class Calendar {
 
 	private static final int[] MAX_DAYS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
-	public int getMaxDaysOfMonth(int month) {
-
-		return MAX_DAYS[month - 1];
+	private static final int[] LEAP_MAX_DAYS = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	
+	public boolean isLeapYear(int year) {
+		if(year % 4 ==0 && (year%100 != 0 || year % 400 ==0))
+			return true;
+		else
+			return false;
 	}
 
-	public void printSampleCalendar() {
-		System.out.println("일  월  화  수  목  금  토  일");
+	public int getMaxDaysOfMonth(int year,int month) {
+		if(isLeapYear(year)) {
+			return LEAP_MAX_DAYS[month-1];
+		}else {
+			return MAX_DAYS[month - 1];
+		}
+	}
+
+	public void printCalendar(int year, int month) {
+		System.out.printf("  <<%4d%3d>>\n", 2017, month);
+		System.out.println("SU MO TU WE TH FR SA");
 		System.out.println("--------------");
-		int[] calendar = new int[28];
+		
+//		if(isLeapYear(year)) {
+//		
+//		}
+		
+		int[] days = new int[7];
 		int num = 1;
+		
 		for (int i = 0; i < 4; ++i) {
 			for (int j = 0; j <= 6; ++j) {
-				calendar[j] = num++;
-				System.out.print(" " + calendar[j] + " ");
+				days[j] = num++;
+				System.out.printf("%3d",days[j]);
 			}
 			System.out.println();
 		}
+
+		if (getMaxDaysOfMonth(year,month) % 7 > 0) {
+			for (int i = 0; i < getMaxDaysOfMonth(year,month) % 28; ++i) {
+				days[i] = num++;
+				System.out.printf("%3d",days[i]);
+			}
+		}
+		System.out.println();
 	}
-	
-	
 
 	public static void main(String[] args) {
 
-		// 숫자를 입력받아 해당하는 달의 최대 일수를 출력하는 프로그램
-		
-		String PROMPT ="cal> ";
-		Scanner scan = new Scanner(System.in);
-		Calendar cal = new Calendar();
-		
-		System.out.println("반복횟수를 입력하세요.");
-		int repeat = scan.nextInt();
-		
-		int month=0;
-		while(true) {
-			System.out.println("달을 입력하세요");
-			System.out.print(PROMPT);
-			month = scan.nextInt();
-			if(month<0||month>12) {
-				System.out.println("Have a nice day!");
-				break;
-			}
-			
-			System.out.printf("%d월은 %d일까지 있습니다.",month,cal.getMaxDaysOfMonth(month));
-			System.out.println();
-		}
-		System.out.println("bye~~");
-		
-		System.out.println("달을 입력하세요");
-		int month1 = scan.nextInt();
-		System.out.println("입력하는 달의 일수는 " + cal.getMaxDaysOfMonth(month1) + "일 입니다.");
-		cal.printSampleCalendar();
-		System.out.println("------------");
-		
-		
-		
-		scan.close();
+		// 셀 실행
+		Prompt p = new Prompt();
+		p.runPrompt();
+
 	}
 
-	
 }
